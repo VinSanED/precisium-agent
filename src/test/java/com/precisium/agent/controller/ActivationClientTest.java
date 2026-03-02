@@ -28,9 +28,9 @@ class ActivationClientTest {
         when(response.body()).thenReturn("STARTED");
         when(tClient.send(any(HttpRequest.class))).thenReturn(response);
 
-        ActivationClient client = new ActivationClient("http://localhost:3000", tClient);
+        ActivationClient client = new ActivationClient("http://localhost:3000/api", tClient);
 
-        AgentStatus status = client.fetchCommand("agent-123");
+        AgentStatus status = client.fetchCommand("1");
 
         assertEquals(AgentStatus.STARTED, status);
 
@@ -38,7 +38,7 @@ class ActivationClientTest {
         verify(tClient).send(requestCaptor.capture());
 
         HttpRequest sentRequest = requestCaptor.getValue();
-        assertEquals(URI.create("http://localhost:3000/agents/agent-123/command"), sentRequest.uri());
+        assertEquals(URI.create("http://localhost:3000/api/agents/1/command"), sentRequest.uri());
         assertEquals("GET", sentRequest.method());
     }
 

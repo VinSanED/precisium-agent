@@ -16,7 +16,7 @@ class ActivationClientFetchCommandTest {
 
     @Test
     void fetchCommand_shouldReturnStatusFromApiResponse() throws Exception {
-        String defaultEndPoint = "http://localhost:3000";
+        String defaultEndPoint = "http://localhost:3000/api";
         Transport tClient = mock(Transport.class);
         @SuppressWarnings("unchecked")
         HttpResponse<String> response = mock(HttpResponse.class);

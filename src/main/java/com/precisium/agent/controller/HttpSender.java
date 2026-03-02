@@ -15,9 +15,11 @@ public final class HttpSender  {
         this.client = client;
     }
 
-    public void sendLine(String endpoint, String line) throws IOException, InterruptedException {
+    public void sendLine(String baseUri, String line) throws IOException, InterruptedException {
         String payload = "{\"message\":\"" + escapeJson(line) + "\"}";
-
+        String endpoint = baseUri+"logs";
+        System.out.println("endPoint: "+endpoint);
+        System.out.println("line: "+line);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(endpoint))
                 .header("Content-Type", "application/json")
@@ -25,7 +27,7 @@ public final class HttpSender  {
                 .build();
 
         HttpResponse<String> response = client.send(request);
-
+        System.out.println("res sender: "+response.toString());
         if (response.statusCode() >= 300) {
             throw new IOException("Falha ao enviar log. HTTP " + response.statusCode() + " - " + response.body());
         }

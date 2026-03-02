@@ -11,13 +11,18 @@ public class Transport implements Transfer {
     private final HttpClient client;
 
     public Transport() {
-        this.client = HttpClient.newHttpClient();
+
+        this.client = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .build();
     }
 
     @Override
     public HttpResponse<String> send(HttpRequest request)
             throws IOException, InterruptedException {
-
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Tansport");
+            HttpResponse<String> res = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("res: "+ res.toString());
+            return res;
     }
 }

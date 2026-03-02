@@ -20,10 +20,12 @@ public final class AgentMain {
         String filePathStr = sc.nextLine();
 
         System.out.println("Envio, uri:");
-        String uriStr = sc.nextLine();
+        String uriStr = "http://192.168.1.102:3000/api/";
+        String agentId = sc.nextLine();
+        System.out.println(uriStr+agentId);
 
         System.out.println("Intervalo de monitoramento (ms):");
-        Long newInterval = sc.nextLong();
+        long newInterval = sc.nextLong();
 
         Config config =
             Config.arbitrary(filePathStr, uriStr, newInterval);
@@ -41,31 +43,56 @@ public final class AgentMain {
         ); 
 
         System.out.println("Iniciando agente....");
-        AgentMain.initialize(activationClient, agent, sc);
+        AgentMain.initialize(activationClient, agent, sc, agentId);
         System.out.println("é isto.....");
         sc.close();
         
     }
+    public static AgentStatus executeOnce(ActivationClient activationClient, AgentRuntime agent, String agentId){
+        try {
+            AgentStatus status = activationClient.fetchCommand(agentId);
+            System.out.println(status);
+            if(status == AgentStatus.STARTED) {
+                agent.start();
+            } else {
+                agent.stop();
+            } 
+            return status;
+        } catch (IOException e) {
+            System.out.println("IO Exception: esse!;;; "+ e);
+            agent.stop();
+            return AgentStatus.STOPPED;
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted Exception: "+ e);
+            agent.stop();
+            return AgentStatus.STOPPED;
 
-    public static void initialize(ActivationClient activationClient, AgentRuntime agent, Scanner sc){
+        } catch (RuntimeException e){
+            System.out.println("Arbtrary Exception: "+ e);
+            agent.stop();
+            return AgentStatus.STOPPED;
+            
+        }
+    }
+
+    public static void initialize(ActivationClient activationClient, AgentRuntime agent, Scanner sc, String agentId){
         
         while (true) {
-            try {
-                AgentStatus agentStatus =  activationClient.fetchCommand("1");
-                int option;
-                Boolean coincidenceAgentStatus = agentStatus == AgentStatus.STARTED;
-                if(coincidenceAgentStatus) {
-                    option=1;
-                } else {
-                    option=2;
-                } 
-                switch (option) {
-                    case 1 ->{ 
-                        agent.start();
-                        Thread.sleep(5000);
+                AgentStatus status =  executeOnce(activationClient, agent, agentId);
+                
+                switch (status) {
+                    case STARTED ->{ 
+                        try{
+                            System.out.println("Started True, sleeping... ");
+                            Thread.sleep(5000);
+                        }catch(InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            System.out.println("interrupted...");
+                            return;
+                        }
                     }
                     
-                    case 2 -> {
+                    case STOPPED -> {
                         agent.stop();
                         System.out.println("server desconected...");
 
@@ -73,26 +100,18 @@ public final class AgentMain {
                         int newOption = sc.nextInt();
                         if (newOption==1){
                             System.out.println("Reiniciando...");
-                            return;
+                            break;
                         } else {
                             System.out.println("Agent Stoped, Encerrando...");
-                            break;
+                            return;
                         }
                     }
-                    default -> System.out.println("erro de inicialização!");
+                    default -> {
+                        System.out.println("erro de inicialização!");
+                        return;
+                    }
                 }
-            } catch (IOException e) {
-                System.out.println("IO Exception: "+ e);
-                break;
             
-            } catch (InterruptedException e) {
-                System.out.println("Interrupted Exception: "+ e);
-                break;
-            
-            } catch (Exception e){
-                System.out.println("Arbtrary Exception: "+ e);
-                break;
-            }
         }
     }
 }
