@@ -1,9 +1,11 @@
 /home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/service/Transport.java
+/home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/desktop/CliConfigProvider.java
 /home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/service/LogReader.java
 /home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/controller/HttpSender.java
 /home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/service/AgentRuntime.java
 /home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/Config.java
 /home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/AgentMain.java
+/home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/core/ConfigProvider.java
 /home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/controller/ActivationClient.java
 /home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/utils/AgentStatus.java
 /home/vinsan/docs/projects/soft/projRefer/precision/logAgent/precisium-agent/src/main/java/com/precisium/agent/utils/Transfer.java

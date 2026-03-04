@@ -1,10 +1,12 @@
 package com.precisium.agent;
 
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.function.BooleanSupplier;
 
 import com.precisium.agent.controller.ActivationClient;
 import com.precisium.agent.controller.HttpSender;
+import com.precisium.agent.desktop.CliConfigProvider;
+import com.precisium.agent.core.ConfigProvider;
 import com.precisium.agent.service.AgentRuntime;
 import com.precisium.agent.service.LogReader;
 import com.precisium.agent.service.Transport;
@@ -13,22 +15,10 @@ import com.precisium.agent.utils.FileState;
 
 public final class AgentMain {
     public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Arquivo de log, caminho:");
-        String filePathStr = sc.nextLine();
-
-        System.out.println("Envio, uri:");
-        String uriStr = "http://192.168.1.102:3000/api/";
-        String agentId = sc.nextLine();
-        System.out.println(uriStr+agentId);
-
-        System.out.println("Intervalo de monitoramento (ms):");
-        long newInterval = sc.nextLong();
-
-        Config config =
-            Config.arbitrary(filePathStr, uriStr, newInterval);
+        CliConfigProvider cliProvider = new CliConfigProvider();
+        ConfigProvider provider = cliProvider;
+        Config config = provider.load();
+        String agentId = cliProvider.loadAgentId();
         Transport transport = new Transport();
 
         HttpSender sender = new HttpSender(transport);
@@ -43,9 +33,8 @@ public final class AgentMain {
         ); 
 
         System.out.println("Iniciando agente....");
-        AgentMain.initialize(activationClient, agent, sc, agentId);
+        AgentMain.initialize(activationClient, agent, cliProvider::shouldRestart, agentId);
         System.out.println("é isto.....");
-        sc.close();
         
     }
     public static AgentStatus executeOnce(ActivationClient activationClient, AgentRuntime agent, String agentId){
@@ -75,7 +64,12 @@ public final class AgentMain {
         }
     }
 
-    public static void initialize(ActivationClient activationClient, AgentRuntime agent, Scanner sc, String agentId){
+    public static void initialize(
+        ActivationClient activationClient,
+        AgentRuntime agent,
+        BooleanSupplier restartDecider,
+        String agentId
+    ) {
         
         while (true) {
                 AgentStatus status =  executeOnce(activationClient, agent, agentId);
@@ -95,10 +89,7 @@ public final class AgentMain {
                     case STOPPED -> {
                         agent.stop();
                         System.out.println("server desconected...");
-
-                        System.out.println("Reiniciar: 1 ---- Encerrar: 0");
-                        int newOption = sc.nextInt();
-                        if (newOption==1){
+                        if (restartDecider.getAsBoolean()){
                             System.out.println("Reiniciando...");
                             break;
                         } else {
