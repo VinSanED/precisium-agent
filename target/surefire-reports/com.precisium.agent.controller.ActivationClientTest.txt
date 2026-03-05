@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.precisium.agent.controller.ActivationClientTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.015 s <<< FAILURE! -- in com.precisium.agent.controller.ActivationClientTest
-com.precisium.agent.controller.ActivationClientTest.fetchCommand_shouldThrowWhenStatusCodeIsNot200 -- Time elapsed: 0.003 s <<< ERROR!
+Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.018 s <<< FAILURE! -- in com.precisium.agent.controller.ActivationClientTest
+com.precisium.agent.controller.ActivationClientTest.fetchCommand_shouldThrowWhenStatusCodeIsNot200 -- Time elapsed: 0.004 s <<< ERROR!
 java.lang.IllegalStateException: Could not initialize plugin: interface org.mockito.plugins.MockMaker (alternate: null)
 	at org.mockito.internal.configuration.plugins.PluginLoader$1.invoke(PluginLoader.java:85)
 	at jdk.proxy2/jdk.proxy2.$Proxy10.isTypeMockable(Unknown Source)

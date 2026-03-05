@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -31,7 +32,9 @@ void runOnce_shouldSendEachNewLineAndReturnTotalCount() throws Exception {
     HttpSender httpSender = mock(HttpSender.class);
     FileState state = mock(FileState.class);
 
-    when(logReader.readNewLines(config.getLogFile(), state))
+    when(state.getOffset()).thenReturn(0L);
+    when(logReader.countLines(config.getLogFile())).thenReturn(3L);
+    when(logReader.readFrom(config.getLogFile(), 0L))
             .thenReturn(List.of("l1", "l2", "l3"));
 
     AgentRuntime runtime =
@@ -44,6 +47,11 @@ void runOnce_shouldSendEachNewLineAndReturnTotalCount() throws Exception {
     verify(httpSender).sendLine(config.getEndpoint(), "l1");
     verify(httpSender).sendLine(config.getEndpoint(), "l2");
     verify(httpSender).sendLine(config.getEndpoint(), "l3");
+    verify(state).load(Path.of(".precisium_cursor"));
+    verify(state).setOffset(1L);
+    verify(state).setOffset(2L);
+    verify(state).setOffset(3L);
+    verify(state, times(3)).save(Path.of(".precisium_cursor"));
     verifyNoMoreInteractions(httpSender);
 }
 

@@ -1,5 +1,7 @@
 package com.precisium.agent.service;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 
@@ -13,8 +15,10 @@ public class AgentRuntime {
     private final LogReader logReader;
     private final HttpSender httpSender;
     private final FileState state;
+    private final Path stateFile;
 
     private volatile boolean running = false;
+    private volatile boolean stateLoaded = false;
 
     public AgentRuntime(
         Config config, 
@@ -26,6 +30,7 @@ public class AgentRuntime {
         this.logReader = logReader;
         this.httpSender = httpSender;
         this.state = fileState;
+        this.stateFile = config.getLogFile().resolveSibling(".precisium_cursor");
     }
 
     public void start() {
@@ -60,13 +65,36 @@ public class AgentRuntime {
     }
 
     int runOnce() throws Exception {
-        List<String> newLines =
-            logReader.readNewLines(config.getLogFile(), state);
+        ensureStateLoaded();
 
-        for (String line : newLines) {
-            httpSender.sendLine(config.getEndpoint(), line);
+        Path logFile = config.getLogFile();
+        long cursor = state.getOffset();
+        long fileLines = logReader.countLines(logFile);
+
+        if (fileLines < cursor) {
+            cursor = 0L;
+            state.setOffset(cursor);
+            state.save(stateFile);
         }
 
-        return newLines.size();
+        List<String> newLines = logReader.readFrom(logFile, cursor);
+        long sentCount = 0L;
+        for (String line : newLines) {
+            httpSender.sendLine(config.getEndpoint(), line);
+            sentCount++;
+            state.setOffset(cursor + sentCount);
+            state.save(stateFile);
+        }
+
+        return (int) sentCount;
+    }
+
+    private void ensureStateLoaded() throws IOException {
+        if (stateLoaded) {
+            return;
+        }
+
+        state.load(stateFile);
+        stateLoaded = true;
     }
 }

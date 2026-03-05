@@ -17,7 +17,7 @@ public final class HttpSender  {
 
     public void sendLine(String baseUri, String line) throws IOException, InterruptedException {
         String payload = "{\"message\":\"" + escapeJson(line) + "\"}";
-        String endpoint = baseUri+"logs";
+        String endpoint = baseUri.charAt(baseUri.length()-1)=='/' ? baseUri+"logs" : baseUri+"/logs";
         System.out.println("endPoint: "+endpoint);
         System.out.println("line: "+line);
         HttpRequest request = HttpRequest.newBuilder()
