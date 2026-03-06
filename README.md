@@ -78,7 +78,7 @@ pkg install curl -y
 A forma mais simples de instalar é usando o script de instalação:
 
 ```bash
-curl -fsSL URI | bash
+curl -fsSL https://github.com/VinSanED/precisium-agent/blob/main/install/install.sh | bash
 ```
 
 Esse comando irá:
