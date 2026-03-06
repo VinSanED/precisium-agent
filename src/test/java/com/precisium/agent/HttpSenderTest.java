@@ -32,7 +32,7 @@ class HttpSenderTest {
 
         HttpSender sender = new HttpSender(client);
 
-        String endpoint = "http://localhost:8080/logs";
+        String endpoint = "http://localhost:8080";
         String line = "hello";
 
         sender.sendLine(endpoint, line);
@@ -44,7 +44,7 @@ class HttpSenderTest {
 
         HttpRequest request = captor.getValue();
 
-        assertEquals(URI.create(endpoint), request.uri());
+        assertEquals(URI.create(endpoint+"/logs"), request.uri());
         assertEquals("POST", request.method());
         assertEquals(
                 "application/json",

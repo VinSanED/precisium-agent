@@ -4,6 +4,7 @@
 
 # Maven
 target/
+.m2
 # Optional: Maven-specific temporary files
 pom.xml.tag
 pom.xml.releaseBackup
