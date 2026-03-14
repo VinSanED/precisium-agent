@@ -17,25 +17,25 @@ public final class CliConfigProvider implements ConfigProvider {
         this.scanner = scanner;
     }
 
-    @Override
-    public Config load() {
-        System.out.println("Arquivo de log, caminho:");
-        String filePathStr = scanner.nextLine();
-
-        System.out.println("Endpoint base (ex: http://precisium.vercel.app/api/):");
-        String endpoint = scanner.nextLine();
-
-        System.out.println("Intervalo de monitoramento (ms):");
-        long newInterval = scanner.nextLong();
-        scanner.nextLine();
-
-        return Config.arbitrary(filePathStr, endpoint, newInterval);
-    }
-
     public String loadAgentId() {
         System.out.println("AgentID: ");
         String agentId = scanner.nextLine();
         return agentId;
+    }
+
+    @Override
+    public Config load() {
+        System.out.println("Arquivo de log, caminho: (default: ./logs/AppLog.txt)");
+        String filePathStr = scanner.nextLine();
+
+        System.out.println("Endpoint base: https://precisium.vercel.app/api/");
+        String endpoint = "https://precisium.vercel.app/api";
+
+        System.out.println("Intervalo de monitoramento (ms): (default: 5000)");
+        long newInterval = scanner.nextLong();
+        scanner.nextLine();
+
+        return Config.arbitrary(filePathStr, endpoint, newInterval, loadAgentId());
     }
 
     public boolean shouldRestart() {

@@ -80,7 +80,7 @@ public class AgentRuntime {
         List<String> newLines = logReader.readFrom(logFile, cursor);
         long sentCount = 0L;
         for (String line : newLines) {
-            httpSender.sendLine(config.getEndpoint(), line);
+            httpSender.sendLine(config.getEndpoint(), line, config.getAgentId());
             sentCount++;
             state.setOffset(cursor + sentCount);
             state.save(stateFile);

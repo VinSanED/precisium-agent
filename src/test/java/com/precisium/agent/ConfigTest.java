@@ -1,13 +1,12 @@
 package com.precisium.agent;
 
-import org.junit.jupiter.api.Test;
-
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
 
 class ConfigTest {
 
@@ -64,19 +63,22 @@ class ConfigTest {
         String pathFile = "testLogFile.txt";
         String endPoint = "http://localhost:3000/api/logs";
         long interval = 1000L;
+        String agentId = "1";
 
-        Config config = Config.arbitrary(pathFile, endPoint, interval);
+        Config config = Config.arbitrary(pathFile, endPoint, interval, agentId);
 
         assertEquals(Path.of("testLogFile.txt"), config.getLogFile());
         assertEquals("http://localhost:3000/api/logs", config.getEndpoint());
         assertEquals(Duration.ofMillis(1000), config.getPollInterval());
+        assertEquals("1", config.getAgentId());
+
     }
 
     @Test
     void fromArbitraryConfiguration_shouldThrowWhenIntervalIsInvalid() {
         assertThrows(
             IllegalArgumentException.class,
-            () -> Config.arbitrary("testLogFile.txt", "http://localhost:8080/logs", 0L)
+            () -> Config.arbitrary("testLogFile.txt", "http://localhost:8080/logs", 0L, "1")
         );
     }
 }

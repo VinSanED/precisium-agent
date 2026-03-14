@@ -8,15 +8,17 @@ public final class Config {
     public static final String DEFAULT_LOG_FILE = "application.log";
     public static final String DEFAULT_ENDPOINT = "http://localhost:3000";
     public static final long DEFAULT_POLL_MS = 1000L;
-
+    
+    private  final String  agentId;
     private final Path logFile;
     private final String endpoint;
     private final Duration pollInterval;
 
-    public Config(Path logFile, String endpoint, Duration pollInterval) {
+    public Config(Path logFile, String endpoint, Duration pollInterval, String agentId) {
         this.logFile = logFile;
         this.endpoint = endpoint;
         this.pollInterval = pollInterval;
+        this.agentId = agentId;
     }
 
 
@@ -29,18 +31,25 @@ public final class Config {
             throw new IllegalArgumentException("AGENT_POLL_MS precisa ser maior que 0");
         }
 
-        return new Config(Path.of(logFile), endpoint, Duration.ofMillis(intervalMs));
+        return new Config(Path.of(logFile), endpoint, Duration.ofMillis(intervalMs), "1");
     }
     public static Config fromEnv(){
         return from(System.getenv());
     }
 
-    public static Config arbitrary(String logFile, String endpoint, long interval) {
+    public static Config arbitrary(String logFile, String endpoint, long interval, String agentId) {
         if (interval <= 0) {
             throw new IllegalArgumentException("interval precisa ser maior que 0");
         }
-        return new Config(Path.of(logFile), endpoint, Duration.ofMillis(interval));
+        if(logFile==""){
+            return new Config(Path.of("./logs/AppLog.txt"), endpoint, Duration.ofMillis(interval), agentId);
+        }
+        return new Config(Path.of(logFile), endpoint, Duration.ofMillis(interval), agentId);
     }
+
+    public String getAgentId(){
+        return agentId;
+    }    
 
     public Path getLogFile() {
         return logFile;

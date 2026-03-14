@@ -1,19 +1,22 @@
 package com.precisium.agent;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-
-import com.precisium.agent.controller.HttpSender;
-import com.precisium.agent.service.Transport;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.precisium.agent.controller.HttpSender;
+import com.precisium.agent.service.Transport;
 
 class HttpSenderTest {
 
@@ -35,7 +38,7 @@ class HttpSenderTest {
         String endpoint = "http://localhost:8080";
         String line = "hello";
 
-        sender.sendLine(endpoint, line);
+        sender.sendLine(endpoint, line, "1");
 
         ArgumentCaptor<HttpRequest> captor =
                 ArgumentCaptor.forClass(HttpRequest.class);
@@ -44,7 +47,7 @@ class HttpSenderTest {
 
         HttpRequest request = captor.getValue();
 
-        assertEquals(URI.create(endpoint+"/logs"), request.uri());
+        assertEquals(URI.create(endpoint+"/logs/1"), request.uri());
         assertEquals("POST", request.method());
         assertEquals(
                 "application/json",
@@ -71,7 +74,7 @@ class HttpSenderTest {
 
         IOException ex = assertThrows(
                 IOException.class,
-                () -> sender.sendLine("http://localhost:8080/logs", "line")
+                () -> sender.sendLine("http://localhost:8080/logs", "line", "1")
         );
 
         assertTrue(ex.getMessage().contains("HTTP 500"));
