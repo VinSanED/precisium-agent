@@ -42,7 +42,7 @@ public final class Config {
             throw new IllegalArgumentException("interval precisa ser maior que 0");
         }
         if(logFile==""){
-            return new Config(Path.of("./logs/AppLog.txt"), endpoint, Duration.ofMillis(interval), agentId);
+            return new Config(Path.of("./logs/AppLog.txt"), "https://precisium.vercel.app/api/", Duration.ofMillis(5000), agentId);
         }
         return new Config(Path.of(logFile), endpoint, Duration.ofMillis(interval), agentId);
     }

@@ -5,8 +5,8 @@ import java.util.function.BooleanSupplier;
 
 import com.precisium.agent.controller.ActivationClient;
 import com.precisium.agent.controller.HttpSender;
-import com.precisium.agent.desktop.CliConfigProvider;
 import com.precisium.agent.core.ConfigProvider;
+import com.precisium.agent.desktop.CliConfigProvider;
 import com.precisium.agent.service.AgentRuntime;
 import com.precisium.agent.service.LogReader;
 import com.precisium.agent.service.Transport;
@@ -18,7 +18,6 @@ public final class AgentMain {
         CliConfigProvider cliProvider = new CliConfigProvider();
         ConfigProvider provider = cliProvider;
         Config config = provider.load();
-        String agentId = cliProvider.loadAgentId();
         Transport transport = new Transport();
 
         HttpSender sender = new HttpSender(transport);
@@ -33,7 +32,7 @@ public final class AgentMain {
         ); 
 
         System.out.println("Iniciando agente....");
-        AgentMain.initialize(activationClient, agent, cliProvider::shouldRestart, agentId);
+        AgentMain.initialize(activationClient, agent, cliProvider::shouldRestart, config.getAgentId());
         System.out.println("é isto.....");
         
     }

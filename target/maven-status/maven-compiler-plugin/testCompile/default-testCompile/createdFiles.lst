@@ -1,0 +1,8 @@
+com/precisium/agent/initializeTest.class
+com/precisium/agent/service/LogReaderTest.class
+com/precisium/agent/controller/ActivationClientTest.class
+com/precisium/agent/controller/ActivationClientFetchCommandTest.class
+com/precisium/agent/ConfigTest.class
+com/precisium/agent/FileStateTest.class
+com/precisium/agent/service/AgentRuntimeTest.class
+com/precisium/agent/HttpSenderTest.class

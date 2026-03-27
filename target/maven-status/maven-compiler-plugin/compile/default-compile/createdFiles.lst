@@ -1,1 +1,13 @@
+com/precisium/agent/desktop/CliConfigProvider.class
+com/precisium/agent/controller/ActivationClient.class
 com/precisium/agent/AgentMain$1.class
+com/precisium/agent/service/Transport.class
+com/precisium/agent/utils/Transfer.class
+com/precisium/agent/Config.class
+com/precisium/agent/AgentMain.class
+com/precisium/agent/service/LogReader.class
+com/precisium/agent/service/AgentRuntime.class
+com/precisium/agent/core/ConfigProvider.class
+com/precisium/agent/utils/AgentStatus.class
+com/precisium/agent/controller/HttpSender.class
+com/precisium/agent/utils/FileState.class

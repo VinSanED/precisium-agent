@@ -29,7 +29,7 @@ public final class CliConfigProvider implements ConfigProvider {
         String filePathStr = scanner.nextLine();
 
         System.out.println("Endpoint base: https://precisium.vercel.app/api/");
-        String endpoint = "https://precisium.vercel.app/api";
+        String endpoint = scanner.nextLine();
 
         System.out.println("Intervalo de monitoramento (ms): (default: 5000)");
         long newInterval = scanner.nextLong();
