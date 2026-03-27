@@ -33,6 +33,7 @@ public final class CliConfigProvider implements ConfigProvider {
 
         System.out.println("Intervalo de monitoramento (ms): (default: 5000)");
         long newInterval = scanner.nextLong();
+        System.out.println("------");
 
         return Config.arbitrary(filePathStr, endpoint, newInterval, loadAgentId());
     }

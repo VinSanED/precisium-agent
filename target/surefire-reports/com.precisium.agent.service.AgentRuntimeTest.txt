@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.precisium.agent.service.AgentRuntimeTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.529 s -- in com.precisium.agent.service.AgentRuntimeTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.018 s -- in com.precisium.agent.service.AgentRuntimeTest
